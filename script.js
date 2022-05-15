@@ -510,16 +510,21 @@
     }).filter(Number.isFinite);
     let removeY = objectsHeap.y.filter((y, i) => removeLine.includes(i));
     removeY = [...new Set(removeY)];
-    let drop = objectsHeap.y.map((y, i) => removeY.every(aux => aux > y) && i).filter(Number.isFinite);
+    let drop = objectsHeap.y.map((y, i) => removeY.every(aux => aux !== y) && y < removeY[0] && i).filter(Number.isFinite);
     if (removeLine.length > 0) {
       clrLine(removeY);
       let dropList = [];
       for (let i of drop) {
+        let dropline = removeY.reduce((acc, cur) => {
+          if (cur > objectsHeap.y[i])
+            acc++;
+          return acc;           
+        }, 0);
         dropList.push({
           x: [objectsHeap.x[i]],
           y: [objectsHeap.y[i]],
           color: objectsHeap.color[i],
-          drop: removeY.length
+          drop: dropline
         });
       }
       dropList.sort((a, b) => b.y - a.y);
