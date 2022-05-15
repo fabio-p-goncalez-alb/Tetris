@@ -19,7 +19,7 @@
   const rows = 10;
   const cols = 15;
   const sides = 6.35;
-  const size = parseInt(tela.canvas.width / (rows + sides));
+  const size = parseInt(canvas.width / (rows + sides));
   const line = 2;
   const padding = size;
   const inicialX = 0;
@@ -32,7 +32,7 @@
   const xHolder = padding * 5;
   const yHolder = padding * 5;
   let textBG;
-  // const screenGap = tela.canvas.width - xTela;
+  // const screenGap = canvas.width - xTela;
   const screenGap = parseInt(padding * 1.92);
   const xTelaInicial = parseInt(inicialX + padding * 1.58);
   const yTelaInicial = parseInt(padding * sides * 1.18);
@@ -101,8 +101,8 @@
     width: parseInt(padding * 2),
     height: parseInt(padding * 1.1),
     run() {
-      tela.canvas.style.cursor = "pointer";
-      tela.canvas.onclick = () => location.reload();
+      canvas.style.cursor = "pointer";
+      canvas.onclick = () => location.reload();
     }
   };
 
@@ -112,8 +112,8 @@
     width: parseInt(padding * 2),
     height: parseInt(padding * 1.1),
     run() {
-      tela.canvas.style.cursor = "pointer";
-      tela.canvas.onclick = isPaused ? initGame : pauseGame;
+      canvas.style.cursor = "pointer";
+      canvas.onclick = isPaused ? initGame : pauseGame;
     }
   };
 
@@ -614,7 +614,6 @@
   }
 
   function handleTouchStart(evt) {
-    getMousePos(tela.canvas, getTouches(evt)[0]);
     if (isPaused || Object.keys(actuallyObject).length <= 0)
       return;
 
@@ -775,7 +774,7 @@
       tela.restore();
     }
     openModal.highlightedButton(false);
-    tela.canvas.style.cursor = "default";
+    canvas.style.cursor = "default";
     openModal.dispatch();
     openModal.isOpen = false;
     game = setInterval(runGame, gameInterval);;
@@ -933,15 +932,15 @@
           tela.stroke();
           tela.fill();
           tela.restore();
-          tela.canvas.style.cursor = "pointer";
-          tela.canvas.onclick = initGame;
+          canvas.style.cursor = "pointer";
+          canvas.onclick = initGame;
         } else {
           tela.save();
           tela.clearRect(x, y, width, height)
           tela.putImageData(buttonStart, x, y);
           tela.restore();
-          tela.canvas.style.cursor = "default";
-          tela.canvas.onclick = null;
+          canvas.style.cursor = "default";
+          canvas.onclick = null;
         }
       }
     }
@@ -963,7 +962,7 @@
   window.addEventListener('DOMContentLoaded', (evt) => {
     evt.preventDefault();
     gameFrame.onload = () => {
-      tela.drawImage(gameFrame, inicialX, inicialY, tela.canvas.width, tela.canvas.height);
+      tela.drawImage(gameFrame, inicialX, inicialY, canvas.width, canvas.height);
       drawScreen(inicialX, inicialY, xHolder, yHolder, xHolderInicial, yHolderInicial, 0.5);
       drawScreen(inicialX, inicialY, xTela, yTela, xTelaInicial, yTelaInicial);
       drawScreen(inicialX, inicialY, xPreview, yPreview, xPreviewInicial, yPreviewInicial, 0.5);
@@ -982,24 +981,24 @@
   window.addEventListener('mousemove', (event) => {
     event.preventDefault();
     if (openModal.isOpen) {
-      if (getMousePos(tela.canvas, event, openModal)) {
+      if (getMousePos(canvas, event, openModal)) {
         openModal.highlightedButton(true);
         return;
       }
       else
         openModal.highlightedButton(false);
     }
-    if (getMousePos(tela.canvas, event, btnPause)) {
+    if (getMousePos(canvas, event, btnPause)) {
       btnPause.run();
       return;
     }
-    if (getMousePos(tela.canvas, event, btnReset)) {
+    if (getMousePos(canvas, event, btnReset)) {
       btnReset.run();
       return;
     }
 
-    tela.canvas.style.cursor = "default";
-    tela.canvas.onclick = null;
+    canvas.style.cursor = "default";
+    canvas.onclick = null;
 
   });
 
