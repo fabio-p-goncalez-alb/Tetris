@@ -28,13 +28,13 @@
      inkscape:lockguides="false"
      inkscape:zoom="2.0000001"
      inkscape:cx="211.74999"
-     inkscape:cy="731.49998"
+     inkscape:cy="771.49996"
      inkscape:window-width="1920"
      inkscape:window-height="1017"
      inkscape:window-x="-8"
      inkscape:window-y="-8"
      inkscape:window-maximized="1"
-     inkscape:current-layer="layer1"
+     inkscape:current-layer="btn_start"
      showguides="false"
      inkscape:object-nodes="false"
      inkscape:snap-object-midpoints="false"
@@ -559,7 +559,7 @@
        style="font-style:normal;font-weight:normal;font-size:40px;line-height:1;font-family:sans-serif;white-space:pre;shape-inside:url(#rect247351-4-5-6);display:inline;fill:#ff6600;fill-opacity:1;stroke:none"><tspan
          x="357.79688"
          y="124.8311"
-         id="tspan7165">SOFT DROP</tspan></text>
+         id="tspan5147">SOFT DROP</tspan></text>
     <text
        xml:space="preserve"
        transform="matrix(0.26458333,0,0,0.26458333,-56.393773,69.826589)"
@@ -567,7 +567,7 @@
        style="font-style:normal;font-weight:normal;font-size:40px;line-height:1;font-family:sans-serif;white-space:pre;shape-inside:url(#rect247351-4-5-6-2);display:inline;fill:#ff6600;fill-opacity:1;stroke:none"><tspan
          x="357.79688"
          y="124.8311"
-         id="tspan7167">ROTATE</tspan></text>
+         id="tspan5149">ROTATE</tspan></text>
     <text
        xml:space="preserve"
        transform="matrix(0.26458333,0,0,0.26458333,-82.085928,89.122416)"
@@ -577,15 +577,15 @@
        y="0"><tspan
          x="357.79688"
          y="124.8311"
-         id="tspan7171"><tspan
+         id="tspan5153"><tspan
            style="text-align:justify"
-           id="tspan7169">MOVE
+           id="tspan5151">MOVE
 </tspan></tspan><tspan
          x="357.79688"
          y="164.8311"
-         id="tspan7175"><tspan
+         id="tspan5157"><tspan
            style="text-align:justify"
-           id="tspan7173"> LEFT</tspan></tspan></text>
+           id="tspan5155"> LEFT</tspan></tspan></text>
     <text
        xml:space="preserve"
        transform="matrix(0.26458333,0,0,0.26458333,-16.226942,89.122416)"
@@ -595,15 +595,15 @@
        y="0"><tspan
          x="357.79688"
          y="124.8311"
-         id="tspan7179"><tspan
+         id="tspan5161"><tspan
            style="text-align:justify"
-           id="tspan7177">MOVE
+           id="tspan5159">MOVE
 </tspan></tspan><tspan
          x="357.79688"
          y="164.8311"
-         id="tspan7183"><tspan
+         id="tspan5165"><tspan
            style="text-align:justify"
-           id="tspan7181">RIGHT</tspan></tspan></text>
+           id="tspan5163">RIGHT</tspan></tspan></text>
     <text
        xml:space="preserve"
        transform="matrix(0.26458333,0,0,0.26458333,-61.303978,13.077489)"
@@ -613,15 +613,15 @@
        y="0"><tspan
          x="357.79688"
          y="120.8311"
-         id="tspan7187"><tspan
+         id="tspan5169"><tspan
            style="text-align:justify"
-           id="tspan7185">HARD
+           id="tspan5167">HARD
 </tspan></tspan><tspan
          x="357.79688"
          y="152.8311"
-         id="tspan7191"><tspan
+         id="tspan5173"><tspan
            style="text-align:justify"
-           id="tspan7189">DROP</tspan></tspan></text>
+           id="tspan5171">DROP</tspan></tspan></text>
     <path
        style="color:#000000;display:inline;fill:#000000;stroke-width:2.3677;-inkscape-stroke:none"
        d="m -362.08203,132.56836 -25.98957,0.50307 0.0989,1.31138 25.98957,-0.50307 1.16229,-0.0225 0.10752,1.42568 16.34284,-2.40075 -16.65678,-1.76199 0.10752,1.42568"
@@ -667,9 +667,9 @@
          transform="matrix(1.0692959,0,0,0.84052651,-14.922174,-104.52571)"><tspan
            x="27.519854"
            y="200.85921"
-           id="tspan7195"><tspan
+           id="tspan5177"><tspan
              style="stroke-width:0.550598"
-             id="tspan7193">C</tspan></tspan></text>
+             id="tspan5175">C</tspan></tspan></text>
     </g>
     <g
        id="g205143"
@@ -698,9 +698,9 @@
          transform="matrix(1.0692959,0,0,0.84052651,12.530725,-105.00398)"><tspan
            x="27.519854"
            y="200.85921"
-           id="tspan7199"><tspan
+           id="tspan5181"><tspan
              style="stroke-width:0.550598"
-             id="tspan7197">P</tspan></tspan></text>
+             id="tspan5179">P</tspan></tspan></text>
     </g>
     <g
        id="g229112"
@@ -738,9 +738,9 @@
          transform="matrix(1.0715321,0,0,0.84052651,-19.455297,-39.525711)"><tspan
            x="27.519854"
            y="200.85921"
-           id="tspan7203"><tspan
+           id="tspan5185"><tspan
              style="stroke-width:0.550023"
-             id="tspan7201">SPACE</tspan></tspan></text>
+             id="tspan5183">SPACE</tspan></tspan></text>
     </g>
     <rect
        style="display:none;fill:#0000ff;fill-rule:evenodd;stroke-width:0.264583;image-rendering:auto"
@@ -756,7 +756,7 @@
        transform="matrix(1.0494533,0,0,0.87816994,-2.9671995,22.566012)"
        style="stroke-width:1.04167">
       <rect
-         style="display:inline;fill:#dadada;fill-opacity:0.497992;fill-rule:evenodd;stroke:#000000;stroke-width:1.0418;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         style="display:inline;fill:#ff0d18;fill-opacity:0.67000002;fill-rule:evenodd;stroke:#000000;stroke-width:1.0418;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
          id="rect34-3"
          width="78.999878"
          height="18.999882"
@@ -774,7 +774,7 @@
          transform="matrix(1.3667066,0,0,1.0988426,-2.7362315,-15.913041)"><tspan
            x="27.519854"
            y="200.85921"
-           id="tspan7205">Start !</tspan></text>
+           id="tspan5187">Start !</tspan></text>
     </g>
     <g
        id="g27729-2-2-3"
@@ -1004,7 +1004,7 @@
        style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;white-space:pre;shape-inside:url(#rect247351);fill:#ff6600;fill-opacity:1;stroke:none"><tspan
          x="357.79688"
          y="129.8311"
-         id="tspan7207">HOLD</tspan></text>
+         id="tspan5189">HOLD</tspan></text>
     <text
        xml:space="preserve"
        transform="matrix(0.26458333,0,0,0.26458333,-93.200617,-18.016999)"
@@ -1012,6 +1012,6 @@
        style="font-style:normal;font-weight:normal;font-size:40px;line-height:1.25;font-family:sans-serif;white-space:pre;shape-inside:url(#rect247351-4);display:inline;fill:#ff6600;fill-opacity:1;stroke:none"><tspan
          x="357.79688"
          y="129.8311"
-         id="tspan7209">PAUSE</tspan></text>
+         id="tspan5191">PAUSE</tspan></text>
   </g>
 </svg>
