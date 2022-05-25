@@ -32,6 +32,7 @@ const yPreview = padding * 5;
 const xHolder = padding * 5;
 const yHolder = padding * 5;
 let textBG;
+let deviceIMG=0;
 // const screenGap = canvas.width - xTela;
 const screenGap = parseInt(padding * 1.92);
 const xTelaInicial = parseInt(inicialX + padding * 1.58);
@@ -53,9 +54,15 @@ patternContext.fill();
 patternContext.stroke();
 const pattern = tela.createPattern(patternCanvas, 'repeat');
 
+let isMobileDevice = window.matchMedia("(any-hover: none)").matches;
+if(isMobileDevice){
+  deviceIMG=125;
+}
+
+
 //Images
 var howToPlay = new Image();
-howToPlay.src = './assets/images/HowToPlay.svg';
+howToPlay.src = `./assets/images/HowToPlay.svg#svgView(viewBox(${deviceIMG},0,120,220))`;
 var gameFrame = new Image();
 gameFrame.src = './assets/images/GameFrame.svg';
 
