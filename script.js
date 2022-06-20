@@ -32,7 +32,7 @@ const yPreview = padding * 5;
 const xHolder = padding * 5;
 const yHolder = padding * 5;
 let textBG;
-let deviceIMG=0;
+let deviceIMG = 0;
 // const screenGap = canvas.width - xTela;
 const screenGap = parseInt(padding * 1.92);
 const xTelaInicial = parseInt(inicialX + padding * 1.58);
@@ -55,8 +55,8 @@ patternContext.stroke();
 const pattern = tela.createPattern(patternCanvas, 'repeat');
 
 let isMobileDevice = window.matchMedia("(any-hover: none)").matches;
-if(isMobileDevice){
-  deviceIMG=125;
+if (isMobileDevice) {
+  deviceIMG = 125;
 }
 
 
@@ -206,12 +206,16 @@ function clone(items) {
 function newObject() {
   // const clone = (items) => items.map(item => Array.isArray(item) ? clone(item) : item);
 
-  const random = clone([object_L, object_J, object_Z, object_S, object_O, object_T, object_I, object_Cross]);
-  const i = Math.floor(Math.random() * (random.length));
-  reverseX = false;
-  reverseY = false;
-  reversePos = false;
-  return random[i];
+  let random = clone([object_L, object_J, object_Z, object_S, object_O, object_T, object_I, object_Cross]);
+  try {
+    random = random.filter(item => item.type !== preview.at(-1).type);
+  } finally {
+    const i = Math.floor(Math.random() * (random.length));
+    reverseX = false;
+    reverseY = false;
+    reversePos = false;
+    return random[i];
+  }
 }
 
 function fillObject(cordX, cordY, size, color) {
@@ -332,15 +336,15 @@ function holdObject() {
 }
 
 function rotateObject(object) {
-  if (object.type === 'object_+' || cantRotate(object.x, object.y)) {
-    if (reversePos) {
-      reverseX = !reverseX;
-    }
-    reverseY = !reverseY;
-    reversePos = !reversePos;
-
+  if (object.type === 'object_+' || cantRotate(object.x, object.y))
     return;
+
+  if (reversePos) {
+    reverseX = !reverseX;
   }
+  reverseY = !reverseY;
+  reversePos = !reversePos;
+
   let objectAux = preventBlockLeak(object)
   clrObject(objectAux.x, objectAux.y);
 
@@ -398,6 +402,8 @@ function rotateObject(object) {
 }
 
 function moveObject(object, move = 0) {
+  if (isPaused)
+    return;
   if (Object.keys(object).length > 0 && !checkObjectSides(object.x, object.y, move)) {
     let objectAux = preventBlockLeak(object);
     clrObject(objectAux.x, objectAux.y);
@@ -473,8 +479,8 @@ function cantRotate(cordX, cordY) {
   let isInvalidLeftX = cordX.some((x, index) => objectsHeap.x.some((xHeap, indexHeap) => objectsHeap.y[indexHeap] === cordY[index] && xHeap < x && xHeap >= x - move || x - move < inicialX));
   if (isInvalidLeftX && isInvalidRightX)
     isInvalidY = cordY.some(y => objectsHeap.y.some(yHeap => yHeap === y - padding * 2));
-  if (isInvalidRightX && isInvalidLeftX && isInvalidY && x < y)    
-      cantRotate = true  
+  if (isInvalidRightX && isInvalidLeftX && isInvalidY && x < y)
+    cantRotate = true
   return cantRotate;
 }
 
@@ -569,6 +575,7 @@ const startMovement = {
           await waitTime(100);
           moveObject(actuallyObject, -(padding));
         }
+        throw 499
       } catch {
         isLeft = false;
       }
@@ -592,7 +599,10 @@ const startMovement = {
       isDown = true;
       try {
         drop = clearInterval(drop);
-        await getIsDown();
+        while (isDown) {
+          await waitTime(100)
+          runDrop();
+        }
         drop = setInterval(runDrop, dropInterval);
       } catch {
         isDown = false;
@@ -607,11 +617,11 @@ function waitTime(ms) {
   return new Promise((resolve, reject) => {
     if (isPaused)
       reject();
-    setTimeout(() => resolve(), ms)
+    setTimeout(resolve, ms)
   })
 }
 
-async function getIsDown() {
+async function getDown() {
   while (isDown) {
     await waitTime(100)
     runDrop();
@@ -700,15 +710,9 @@ function handleTouchEnd(evt) {
         holdObject();
         isUp = false;
       }
-
     }
   } else {
-    if (reversePos) {
-      reverseX = !reverseX;
-    }
-    reverseY = !reverseY;
     rotateObject(actuallyObject);
-    reversePos = !reversePos;
   }
 
   isMoved = false;
@@ -721,12 +725,7 @@ document.addEventListener('keydown', ({ key, repeat }) => {
     if (!repeat) {
       switch (key.toLowerCase()) {
         case 'arrowup':
-          if (reversePos) {
-            reverseX = !reverseX;
-          }
-          reverseY = !reverseY;
           rotateObject(actuallyObject);
-          reversePos = !reversePos;
           break;
         case 'p':
           if (isPaused) {
@@ -745,22 +744,20 @@ document.addEventListener('keydown', ({ key, repeat }) => {
           }
           checkGame(true);
           break;
-      }
-    }
-    switch (key) {
-      case 'ArrowLeft':
-        if (!isRight)
+        case 'arrowleft':
+          isRight = false;
           startMovement.left();
-        break;
-      case 'ArrowRight':
-        if (!isLeft)
+          break;
+        case 'arrowright':
+          isLeft = false;
           startMovement.right();
-        break;
-      case 'ArrowDown':
-        startMovement.down();
-        break;
-      default:
-        break;
+          break;
+        case 'arrowdown':
+          startMovement.down();
+          break;
+        default:
+          break;
+      }
     }
   }
 });
