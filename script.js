@@ -20,7 +20,7 @@ const rows = 10;
 const cols = 15;
 const sides = 6.35;
 const size = parseInt(canvas.width / (rows + sides));
-const line = 2;
+const line = size / 12;
 const padding = size;
 const inicialX = 0;
 const inicialY = 0;
@@ -46,10 +46,11 @@ const patternCanvas = document.createElement('canvas')
 const patternContext = patternCanvas.getContext("2d");
 patternCanvas.width = padding;
 patternCanvas.height = padding;
+// patternContext.strokeStyle = "#000000";
 patternContext.strokeStyle = "#ffffaa";
 patternContext.fillStyle = "#000000";
-patternContext.lineWidth = 0.3;
-patternContext.rect(0, 0, patternCanvas.width + .6, patternCanvas.height + .6);
+patternContext.lineWidth = .5;
+patternContext.rect(0, 0, patternCanvas.width, patternCanvas.height);
 patternContext.fill();
 patternContext.stroke();
 const pattern = tela.createPattern(patternCanvas, 'repeat');
@@ -224,27 +225,27 @@ function fillObject(cordX, cordY, size, color) {
   for (let i = 0; i < cordX.length; i++) {
     tela.save();
     tela.globalAlpha = 0.5;
-    tela.fillRect(cordX[i] + 1, cordY[i] + 1, size, size);
+    tela.fillRect(cordX[i], cordY[i], size, size);
 
-    tela.strokeStyle = "black";
-    tela.lineWidth = 2;
+    tela.strokeStyle = color;
+    tela.lineWidth = 5;
     tela.beginPath();
-    tela.moveTo(cordX[i] + 1, cordY[i] + 1);
-    tela.lineTo(cordX[i] + 1 + line, cordY[i] + 1 + line);
+    tela.moveTo(cordX[i] + 2, cordY[i] + 2);
+    tela.lineTo(cordX[i] + 2 + line, cordY[i] + 2 + line);
 
-    tela.moveTo(cordX[i] + 1, cordY[i] + 1 + size);
-    tela.lineTo(cordX[i] + 1 + line, cordY[i] + 1 + size - line);
+    tela.moveTo(cordX[i] - 2 + size, cordY[i] + 2);
+    tela.lineTo(cordX[i] - 2 + size - line, cordY[i] + 2 + line);
 
-    tela.moveTo(cordX[i] + 1 + size, cordY[i] + 1);
-    tela.lineTo(cordX[i] + 1 + size - line, cordY[i] + 1 + line);
+    tela.moveTo(cordX[i] - 2 + size, cordY[i] - 2 + size);
+    tela.lineTo(cordX[i] - 2 + size - line, cordY[i] - 2 + size - line);
 
-    tela.moveTo(cordX[i] + 1 + size, cordY[i] + 1 + size);
-    tela.lineTo(cordX[i] + 1 + size - line, cordY[i] + 1 + size - line);
+    tela.moveTo(cordX[i] + 2, cordY[i] - 2 + size);
+    tela.lineTo(cordX[i] + 2 + line, cordY[i] - 2 + size - line);
     tela.closePath();
     tela.stroke();
 
     tela.restore();
-    tela.fillRect(cordX[i] + 4, cordY[i] + 4, size - 6, size - 6);
+    tela.fillRect(cordX[i] + line, cordY[i] + line, size - line * 2, size - line * 2);
   }
   tela.restore();
 };
@@ -437,7 +438,7 @@ function clrObject(cordX, cordY) {
   tela.translate(xTelaInicial, yTelaInicial);
   tela.fillStyle = pattern;
   for (let i = 0; i < cordX.length; i++) {
-    tela.fillRect(cordX[i] + 1, cordY[i] + 1, size, size);
+    tela.fillRect(cordX[i], cordY[i], size, size);
   }
   tela.restore();
 }
