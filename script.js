@@ -666,8 +666,8 @@ function handleTouchMove(evt) {
   let yDiff = yDown - yUp;
   isMoved = true;
 
-  if (Math.abs(xDiff) > Math.abs(yDiff)) {
-    if (Math.abs(xDiff) > padding * 0.25) {
+  
+    if (Math.abs(xDiff) > padding * 0.3) {
       try {
         if (xDiff > 0) {
           moveObject(actuallyObject, -(padding));
@@ -678,7 +678,6 @@ function handleTouchMove(evt) {
         xDown = xUp;
       }
     }
-  } else {
     if (Math.abs(yDiff) > padding * 0.75) {
       if (yDiff > 0) {
         isDown = false;
@@ -688,7 +687,6 @@ function handleTouchMove(evt) {
       }
     }
   }
-}
 
 function handleTouchEnd(evt) {
   if (openModal.isOpen)
