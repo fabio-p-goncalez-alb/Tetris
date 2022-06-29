@@ -446,7 +446,7 @@ function clrObject(cordX, cordY) {
 function clrLine(cordY) {
   tela.save()
   tela.fillStyle = pattern;
-  cordY.forEach(y => tela.fillRect(inicialX, y + 1, xTela, size));
+  cordY.forEach(y => tela.fillRect(inicialX, y, xTela, size));
   tela.restore();
   sumPoints(cordY.length);
   cordY.length === 4 ? combo4.play() : combo.play();
