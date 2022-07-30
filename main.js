@@ -62,9 +62,9 @@ if (isMobileDevice) {
 
 
 //Images
-var howToPlay = new Image();
+const howToPlay = new Image();
 howToPlay.src = `./assets/images/HowToPlay.svg#svgView(viewBox(${deviceIMG},0,120,220))`;
-var gameFrame = new Image();
+const gameFrame = new Image();
 gameFrame.src = './assets/images/GameFrame.svg';
 
 //Audios
@@ -282,7 +282,7 @@ function preventBlockLeak(object) {
   }
   ).filter(Number.isFinite);
   let objectAux = { x: [], y: [] };
-  for (i of index) {
+  for (let i of index) {
     objectAux.x.push(object.x[i])
     objectAux.y.push(object.y[i])
   }
@@ -511,7 +511,7 @@ function checkObjectRotate(cordX, cordY) {
     if (matchHeapAfter)
       matchReverse = cordY.some(y => objectsHeap.x.some((xHeap, indexHeap) => objectsHeap.y[indexHeap] === y && (xHeap === Math.max(...cordX) + padding || Math.max(...cordX) + padding >= xTela)));
 
-    for (i in cordX) {
+    for (let i in cordX) {
 
       if ((matchBefore || matchHeapBefore) && !matchReverse) {
         cordX[i] -= padding;
@@ -782,7 +782,7 @@ function initGame() {
     tela.save();
     tela.resetTransform();
     tela.translate(xPreviewInicial, yPreviewInicial);
-    for (i = 0; i < 3; i++) {
+    for (let i = 0; i < 3; i++) {
       preview.push(Object.assign({}, previewObject()));
       tela.translate(0, yPreviewInicial * .33);
     }
@@ -1040,10 +1040,10 @@ function checkLevelUp() {
   }
 }
 
-bgm.addEventListener('timeupdate', () => {
+bgm.addEventListener('timeupdate', (sound) => {
   let buffer = .77
-  if (this.currentTime > this.duration - buffer) {
-    this.currentTime = 0
-    this.play();
+  if (sound.currentTime > sound.duration - buffer) {
+    sound.currentTime = 0
+    sound.play();
   }
 });
