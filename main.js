@@ -73,8 +73,8 @@ const blockConfirm = new Audio('./assets/audios/blockConfirm.ogg');
 const combo = new Audio('./assets/audios/combo.ogg');
 const combo4 = new Audio('./assets/audios/combo4.ogg');
 
-bgm.loop = true;
-// bgm.preload = 'auto';
+// bgm.loop = true;
+bgm.preload = 'auto';
 // bgm.autoplay = true;
 
 let reverseX = false;
@@ -862,6 +862,7 @@ function checkGame(checkMove = false) {
       holding = false;
       countCheckMovement = 0;
       countPosition = 0;
+      blockConfirm.load();
       blockConfirm.play();
     }
   }
@@ -1041,9 +1042,9 @@ function checkLevelUp() {
 }
 
 bgm.addEventListener('timeupdate', (sound) => {
-  let buffer = .77
-  if (sound.currentTime > sound.duration - buffer) {
-    sound.currentTime = 0
-    sound.play();
+  let buffer = .1337
+  if (bgm.currentTime >= bgm.duration - buffer) {
+    bgm.load();
+    bgm.play();
   }
 });
