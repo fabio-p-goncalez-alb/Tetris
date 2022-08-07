@@ -69,7 +69,6 @@ const howToPlay = new Image();
 howToPlay.src = `./assets/images/HowToPlay.svg#svgView(viewBox(${deviceIMG},0,120,220))`;
 const gameFrame = new Image();
 gameFrame.src = './assets/images/GameFrame.svg';
-console.log(gameFrame);
 
 //Audios
 const bgm = new Audio('./assets/audios/bgm.ogg');
@@ -1002,8 +1001,7 @@ window.addEventListener('DOMContentLoaded', (evt) => {
     slider.dispatchEvent(new Event('input'));
     tela.save();
     tela.resetTransform();
-    tela.beginPath();
-    textBG = `rgba(${new Array(...tela.getImageData(sizePreview + padding, sizePreview - padding * 2.75, 1, 1).data).map((a, i) => i === 3 ? a / 255 : a)})`;
+    tela.beginPath();    
     tela.closePath();
     tela.restore();
   }
@@ -1072,9 +1070,6 @@ function changeColor(e) {
   imageData = tela.getImageData(inicialX, inicialY, canvas.width, canvas.height);
   const data = imageData.data;
   for (let i = 0; i < data.length; i += 4) {
-    const red = data[i];
-    const green = data[i + 1];
-    const blue = data[i + 2];
     const alpha = data[i + 3];
     if (alpha == 75 || alpha == 129 || alpha == 225) {
       let newRgb = hslToRgb(value, 1, .5);
@@ -1084,6 +1079,7 @@ function changeColor(e) {
     }
   }
   tela.putImageData(imageData, inicialX, inicialY);
+  textBG = `rgba(${new Array(...tela.getImageData(sizePreview, sizePreview * .5, 1, 1).data).map((a, i) => i === 3 ? a /255 : a)})`;
 }
 
 function hslToRgb(h, s, l) {
