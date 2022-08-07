@@ -34,7 +34,7 @@ const yHolder = padding * 5;
 let textBG;
 let deviceIMG = 0;
 // const screenGap = canvas.width - xTela;
-const screenGap = parseInt(padding * 1.92);
+const screenGap = parseInt(padding * 1.75);
 const xTelaInicial = parseInt(inicialX + padding * 1.58);
 const yTelaInicial = parseInt(padding * sides * 1.18);
 const xPreviewInicial = xTelaInicial + xTela + screenGap;
@@ -66,6 +66,7 @@ const howToPlay = new Image();
 howToPlay.src = `./assets/images/HowToPlay.svg#svgView(viewBox(${deviceIMG},0,120,220))`;
 const gameFrame = new Image();
 gameFrame.src = './assets/images/GameFrame.svg';
+console.log(gameFrame);
 
 //Audios
 const bgm = new Audio('./assets/audios/bgm.ogg');
@@ -102,6 +103,7 @@ let openModal;
 let game;
 let check;
 let drop;
+let imageData;
 
 const btnReset = {
   x: parseInt(sizePreview * 1.11),
@@ -666,27 +668,27 @@ function handleTouchMove(evt) {
   let yDiff = yDown - yUp;
   isMoved = true;
 
-  
-    if (Math.abs(xDiff) > padding * 0.3) {
-      try {
-        if (xDiff > 0) {
-          moveObject(actuallyObject, -(padding));
-        } else {
-          moveObject(actuallyObject, padding);
-        }
-      } finally {
-        xDown = xUp;
-      }
-    }
-    if (Math.abs(yDiff) > padding * 0.75) {
-      if (yDiff > 0) {
-        isDown = false;
-        isUp = true;
+
+  if (Math.abs(xDiff) > padding * 0.3) {
+    try {
+      if (xDiff > 0) {
+        moveObject(actuallyObject, -(padding));
       } else {
-        startMovement.down();
+        moveObject(actuallyObject, padding);
       }
+    } finally {
+      xDown = xUp;
     }
   }
+  if (Math.abs(yDiff) > padding * 0.75) {
+    if (yDiff > 0) {
+      isDown = false;
+      isUp = true;
+    } else {
+      startMovement.down();
+    }
+  }
+}
 
 function handleTouchEnd(evt) {
   if (openModal.isOpen)
@@ -820,16 +822,23 @@ function runGame() {
   tela.save();
   tela.resetTransform();
   tela.beginPath();
-  tela.font = "100px Verdana";
+  tela.font = "60px Verdana";
   tela.save();
   tela.fillStyle = textBG;
-  tela.fillRect(sizePreview * 1.2, sizePreview - padding * 2.8, tela.measureText(level).width, 85);
-  tela.fillRect(sizePreview * 2.6, sizePreview - padding * 2.8, tela.measureText(countLines).width, 85);
-  tela.fillRect(sizePreview + padding, sizePreview - padding * 1.1, tela.measureText(points).width, 85);
+  const pointsWidth = parseInt(tela.measureText(points).width);
+  const levelWidth = parseInt(tela.measureText(level).width);
+  const countLinesWidth = parseInt(tela.measureText(countLines).width);
+  const height = 50;
+  tela.clearRect(sizePreview * 1.2, sizePreview - padding * 2.75, pointsWidth, height);
+  tela.clearRect(sizePreview * 1.2, sizePreview - padding * 1.75, levelWidth, height);
+  tela.clearRect(sizePreview * 1.2, sizePreview - padding * 0.75, countLinesWidth, height);
+  tela.fillRect(sizePreview * 1.2, sizePreview - padding * 2.75, pointsWidth, height);
+  tela.fillRect(sizePreview * 1.2, sizePreview - padding * 1.75, levelWidth, height);
+  tela.fillRect(sizePreview * 1.2, sizePreview - padding * 0.75, countLinesWidth, height);
   tela.restore();
-  tela.fillText(level, sizePreview * 1.2, sizePreview - padding * 1.7);
-  tela.fillText(countLines, sizePreview * 2.6, sizePreview - padding * 1.7);
-  tela.fillText(points, sizePreview + padding, sizePreview);
+  tela.fillText(points, sizePreview * 1.2, sizePreview - padding * 2.1);
+  tela.fillText(level, sizePreview * 1.2, sizePreview - padding * 1.1);
+  tela.fillText(countLines, sizePreview * 1.2, sizePreview - padding * 0.1);
   tela.closePath();
   tela.restore();
   if (Math.min(...objectsHeap.y) < inicialY) {
@@ -985,17 +994,19 @@ window.addEventListener('DOMContentLoaded', (evt) => {
     drawScreen(inicialX, inicialY, xPreview, yPreview, xPreviewInicial, yPreviewInicial * 1.33, 0.5);
     drawScreen(inicialX, inicialY, xPreview, yPreview, xPreviewInicial, yPreviewInicial * 1.66, 0.5);
     openModal = modal();
+    slider.dispatchEvent(new Event('input'));
     tela.save();
     tela.resetTransform();
     tela.beginPath();
-    textBG = `rgba(${new Array(...tela.getImageData(sizePreview + padding, sizePreview, 1, 1).data).map((a, i) => i === 3 ? a / 255 : a)})`;
+    textBG = `rgba(${new Array(...tela.getImageData(sizePreview + padding, sizePreview - padding * 2.75, 1, 1).data).map((a, i) => i === 3 ? a / 255 : a)})`;
     tela.closePath();
     tela.restore();
   }
 });
 
-window.addEventListener('mousemove', (event) => {
+canvas.addEventListener('mousemove', (event) => {
   event.preventDefault();
+  console.log(event.type);
   if (openModal.isOpen) {
     if (getMousePos(canvas, event, openModal)) {
       openModal.highlightedButton(true);
@@ -1048,3 +1059,129 @@ bgm.addEventListener('timeupdate', (sound) => {
     bgm.play();
   }
 });
+
+const slider = document.querySelector('#color');
+console.log(slider.attributes.value);
+slider.addEventListener('input', changeColor, false);
+
+function changeColor(e) {  
+  let value = e.target.value / 360;
+  imageData = tela.getImageData(inicialX, inicialY, canvas.width, canvas.height);
+  const data = imageData.data;
+  for (let i = 0; i < data.length; i += 4) {    
+    const red = data[i];
+    const green = data[i + 1];
+    const blue = data[i + 2];
+    const alpha = data[i + 3];
+    if (alpha == 75 || alpha == 129 || alpha == 225){
+      // let hsl = rgbToHsl(red, green, blue);
+      // let newRgb = hslToRgb(hsl.h + value, hsl.s, hsl.l);
+      let newRgb = hslToRgb(value, 1, .5);
+      // console.log(newRgb);
+      // if (alpha < 75 || alpha == 129) {
+        data[i] = newRgb.r;
+        data[i + 1] = newRgb.g;
+        data[i + 2] = newRgb.b;
+    }
+    }
+    // if (alpha == 225) {
+  tela.putImageData(imageData, inicialX, inicialY);
+}
+
+// slider.addEventListener('change', (e) => HueShift(30,300,-e.target.value/100), false);
+
+
+// function HueShift(hue1,hue2,shift){
+//   console.log(shift)
+//   for (var i = 0; i < originalData.length; i += 4) {
+//     let red = originalData[i + 0];
+//     let green = originalData[i + 1];
+//     let blue = originalData[i + 2];
+//     let alpha = originalData[i + 3];
+//     // skip transparent/semiTransparent pixels
+//     // if (alpha < 100) { continue; }
+
+//     var hsl = rgbToHsl(red, green, blue);    
+    
+//     // change redish pixels to the new color
+//     if (alpha < 150 || alpha == 255) {
+//       // var newRgb = hslToRgb(hsl.h + shift, hsl.s, hsl.l);
+//       let newRgb = hslToRgb(hsl.h + shift, hsl.s, hsl.l);
+//       // let newRgb = rgbConvert(shift.target.value)
+//       originalData[i + 0] = newRgb.r;
+//       originalData[i + 1] = newRgb.g;
+//       originalData[i + 2] = newRgb.b;
+//     }
+//     // console.log(`RED: ${originalData[i + 0]},\nGREEN: ${originalData[i + 1]},\nBLUE: ${originalData[i + 2]}`)
+//   }
+//   tela.putImageData(imageData, 0, 0);
+//   console.log(typeof(originalData))
+//   console.log(originalData)
+// }
+
+
+function rgbConvert(value) {
+  let r = 0;
+  let g = 0;
+  let b = 0;
+  switch (value) {
+    case (value<=255): b = value; break;
+    case (value<=510): b = 255; g = value; break;
+    case (value<=765): b = 255 - value; g = 255; break;
+    case (value<=1020):   
+  }
+  return {r, g, b};
+}
+
+////////////////////////
+// Helper functions
+//
+
+function rgbToHsl(r, g, b) {
+  if (r + g + b === 0) r= 255;
+  r /= 255, g /= 255, b /= 255;
+  let max = Math.max(r, g, b);
+  let min = Math.min(r, g, b);
+  let h = (max + min) / 2;
+  let s = (max + min) / 2;
+  let l = (max + min) / 2;
+  if (max == min) {
+    h = s = 0; // achromatic
+  } else {
+    let d = max - min;
+    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+    switch (max) {
+      case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+      case g: h = (b - r) / d + 2; break;
+      case b: h = (r - g) / d + 4; break;
+    }
+    h /= 6;
+  }
+  return ({ h, s, l });
+}
+
+function hslToRgb(h, s, l) {
+  let r, g, b;
+  if (s == 0) {
+    r = g = b = l; // achromatic
+  } else {
+    function hue2rgb(p, q, t) {
+      if (t < 0) t += 1;
+      if (t > 1) t -= 1;
+      if (t < 1 / 6) return p + (q - p) * 6 * t;
+      if (t < 1 / 2) return q;
+      if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
+      return p;
+    }
+    let q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+    let p = 2 * l - q;
+    r = hue2rgb(p, q, h + 1 / 3);
+    g = hue2rgb(p, q, h);
+    b = hue2rgb(p, q, h - 1 / 3);
+  }
+  return ({
+    r: Math.round(r * 255),
+    g: Math.round(g * 255),
+    b: Math.round(b * 255),
+  });
+}

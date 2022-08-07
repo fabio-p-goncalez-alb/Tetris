@@ -6,9 +6,16 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       devOptions: {
-        enabled: true
+        enabled: false
       },
-      includeAssets: ['assets/images/tetrin.ico'],
+      includeAssets: [
+        'assets/audios/bgm.ogg',
+        'assets/audios/blockConfirm.ogg',
+        'assets/audios/combo.ogg',
+        'assets/audios/combo4.ogg',
+        'assets/images/GameFrame.svg',
+        'assets/images/HowToPlay.svg'
+      ],
       manifest: {
         name: 'Tetrin',
         short_name: 'Tetrin',
