@@ -1,18 +1,21 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <link href="/assets/images/tetrin.ico" type="image/x-icon" rel="icon">
-    <title>Tetris!!!</title>
-    <link rel="stylesheet" type="text/css" href="/src/css/style.css">
-    <script defer type="module" src="/main.js"></script>
-  </head>
-  <body>
-    <canvas id="canvas" width="1200" height="1800"></canvas><br>
-    <div>
-      <!-- <input id="color" type="color" min="0" max="1275" step="1" value="0"> -->
-      <input id="color" type="range" min="0" max="360" value="60">
-    </div>
-  </body>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <link href="/assets/images/tetrin.ico" type="image/x-icon" rel="icon">
+  <title>Tetris!!!</title>
+  <link rel="stylesheet" type="text/css" href="/src/css/style.css">
+  <script defer type="module" src="/main.js"></script>
+</head>
+
+<body>
+  <div id="game__screen">
+    <canvas id="canvas" width="1200" height="1800"></canvas>
+    <!-- <input id="color" type="color" min="0" max="1275" step="1" value="0"> -->
+    <input id="color" type="range" min="0" max="360" value="190">
+  </div>
+</body>
+
 </html>
