@@ -38,9 +38,12 @@ const screenGap = parseInt(padding * 1.75);
 const xTelaInicial = parseInt(inicialX + padding * 1.58);
 const yTelaInicial = parseInt(padding * sides * 1.18);
 const xPreviewInicial = xTelaInicial + xTela + screenGap;
-const yPreviewInicial = yTelaInicial + padding * 1.5;
+const yPreviewInicial = [];
+yPreviewInicial.push(yTelaInicial + padding * 1.45);
+yPreviewInicial.push(yTelaInicial + padding * 4.5);
+yPreviewInicial.push(yTelaInicial + padding * 7.6);
 const xHolderInicial = xTelaInicial + xTela + screenGap;
-const yHolderInicial = yTela + yTelaInicial - padding * 2;
+const yHolderInicial = yTela + yTelaInicial - padding * 1.9;
 const sizePreview = padding * 5;
 const patternCanvas = document.createElement('canvas')
 const patternContext = patternCanvas.getContext("2d");
@@ -269,7 +272,6 @@ function previewObject() {
 }
 function fillPreview(preview) {
   tela.save();
-  tela.translate(xPreviewInicial, yPreviewInicial)
   tela.scale(0.5, 0.5);
   clrscr(inicialX, inicialY, xPreview, yPreview);
   tela.translate(padding, padding)
@@ -294,10 +296,13 @@ function preventBlockLeak(object) {
 function nextPreview() {
   tela.save()
   tela.resetTransform();
-  preview.forEach((preview) => {
-    fillPreview(preview);
-    tela.translate(0, yPreviewInicial * .33);
+  preview.forEach((next, i) => {
+    tela.save()
+    tela.translate(xPreviewInicial, yPreviewInicial[i]);
+    fillPreview(next);
+    tela.restore();
   });
+  tela.translate(xPreviewInicial, yPreviewInicial[preview.length]);
   preview.push(Object.assign({}, previewObject()));
   tela.restore();
 }
@@ -783,10 +788,9 @@ function initGame() {
   if (!preview.length) {
     tela.save();
     tela.resetTransform();
-    tela.translate(xPreviewInicial, yPreviewInicial);
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < yPreviewInicial.length; i++) {
+      tela.translate(xPreviewInicial, yPreviewInicial[i]);
       preview.push(Object.assign({}, previewObject()));
-      tela.translate(0, yPreviewInicial * .33);
     }
     tela.restore();
   }
@@ -815,8 +819,8 @@ function pauseGame() {
 function runGame() {
   if (Object.keys(actuallyObject).length === 0) {
     Object.assign(actuallyObject, preview.shift());
-    startObject(actuallyObject);
     nextPreview();
+    startObject(actuallyObject);
   }
   checkLevelUp();
   tela.save();
@@ -990,9 +994,10 @@ window.addEventListener('DOMContentLoaded', (evt) => {
     tela.drawImage(gameFrame, inicialX, inicialY, canvas.width, canvas.height);
     drawScreen(inicialX, inicialY, xHolder, yHolder, xHolderInicial, yHolderInicial, 0.5);
     drawScreen(inicialX, inicialY, xTela, yTela, xTelaInicial, yTelaInicial);
-    drawScreen(inicialX, inicialY, xPreview, yPreview, xPreviewInicial, yPreviewInicial, 0.5);
-    drawScreen(inicialX, inicialY, xPreview, yPreview, xPreviewInicial, yPreviewInicial * 1.33, 0.5);
-    drawScreen(inicialX, inicialY, xPreview, yPreview, xPreviewInicial, yPreviewInicial * 1.66, 0.5);
+    yPreviewInicial.forEach(yPreviewInicial => {
+      drawScreen(inicialX, inicialY, xPreview, yPreview, xPreviewInicial, yPreviewInicial, 0.5);
+    })
+
     openModal = modal();
     slider.dispatchEvent(new Event('input'));
     tela.save();
@@ -1006,7 +1011,6 @@ window.addEventListener('DOMContentLoaded', (evt) => {
 
 canvas.addEventListener('mousemove', (event) => {
   event.preventDefault();
-  console.log(event.type);
   if (openModal.isOpen) {
     if (getMousePos(canvas, event, openModal)) {
       openModal.highlightedButton(true);
@@ -1061,124 +1065,44 @@ bgm.addEventListener('timeupdate', (sound) => {
 });
 
 const slider = document.querySelector('#color');
-console.log(slider.attributes.value);
 slider.addEventListener('input', changeColor, false);
 
-function changeColor(e) {  
+function changeColor(e) {
   let value = e.target.value / 360;
   imageData = tela.getImageData(inicialX, inicialY, canvas.width, canvas.height);
   const data = imageData.data;
-  for (let i = 0; i < data.length; i += 4) {    
+  for (let i = 0; i < data.length; i += 4) {
     const red = data[i];
     const green = data[i + 1];
     const blue = data[i + 2];
     const alpha = data[i + 3];
-    if (alpha == 75 || alpha == 129 || alpha == 225){
-      // let hsl = rgbToHsl(red, green, blue);
-      // let newRgb = hslToRgb(hsl.h + value, hsl.s, hsl.l);
+    if (alpha == 75 || alpha == 129 || alpha == 225) {
       let newRgb = hslToRgb(value, 1, .5);
-      // console.log(newRgb);
-      // if (alpha < 75 || alpha == 129) {
-        data[i] = newRgb.r;
-        data[i + 1] = newRgb.g;
-        data[i + 2] = newRgb.b;
+      data[i] = newRgb.r;
+      data[i + 1] = newRgb.g;
+      data[i + 2] = newRgb.b;
     }
-    }
-    // if (alpha == 225) {
+  }
   tela.putImageData(imageData, inicialX, inicialY);
-}
-
-// slider.addEventListener('change', (e) => HueShift(30,300,-e.target.value/100), false);
-
-
-// function HueShift(hue1,hue2,shift){
-//   console.log(shift)
-//   for (var i = 0; i < originalData.length; i += 4) {
-//     let red = originalData[i + 0];
-//     let green = originalData[i + 1];
-//     let blue = originalData[i + 2];
-//     let alpha = originalData[i + 3];
-//     // skip transparent/semiTransparent pixels
-//     // if (alpha < 100) { continue; }
-
-//     var hsl = rgbToHsl(red, green, blue);    
-    
-//     // change redish pixels to the new color
-//     if (alpha < 150 || alpha == 255) {
-//       // var newRgb = hslToRgb(hsl.h + shift, hsl.s, hsl.l);
-//       let newRgb = hslToRgb(hsl.h + shift, hsl.s, hsl.l);
-//       // let newRgb = rgbConvert(shift.target.value)
-//       originalData[i + 0] = newRgb.r;
-//       originalData[i + 1] = newRgb.g;
-//       originalData[i + 2] = newRgb.b;
-//     }
-//     // console.log(`RED: ${originalData[i + 0]},\nGREEN: ${originalData[i + 1]},\nBLUE: ${originalData[i + 2]}`)
-//   }
-//   tela.putImageData(imageData, 0, 0);
-//   console.log(typeof(originalData))
-//   console.log(originalData)
-// }
-
-
-function rgbConvert(value) {
-  let r = 0;
-  let g = 0;
-  let b = 0;
-  switch (value) {
-    case (value<=255): b = value; break;
-    case (value<=510): b = 255; g = value; break;
-    case (value<=765): b = 255 - value; g = 255; break;
-    case (value<=1020):   
-  }
-  return {r, g, b};
-}
-
-////////////////////////
-// Helper functions
-//
-
-function rgbToHsl(r, g, b) {
-  if (r + g + b === 0) r= 255;
-  r /= 255, g /= 255, b /= 255;
-  let max = Math.max(r, g, b);
-  let min = Math.min(r, g, b);
-  let h = (max + min) / 2;
-  let s = (max + min) / 2;
-  let l = (max + min) / 2;
-  if (max == min) {
-    h = s = 0; // achromatic
-  } else {
-    let d = max - min;
-    s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
-    switch (max) {
-      case r: h = (g - b) / d + (g < b ? 6 : 0); break;
-      case g: h = (b - r) / d + 2; break;
-      case b: h = (r - g) / d + 4; break;
-    }
-    h /= 6;
-  }
-  return ({ h, s, l });
 }
 
 function hslToRgb(h, s, l) {
   let r, g, b;
-  if (s == 0) {
-    r = g = b = l; // achromatic
-  } else {
-    function hue2rgb(p, q, t) {
-      if (t < 0) t += 1;
-      if (t > 1) t -= 1;
-      if (t < 1 / 6) return p + (q - p) * 6 * t;
-      if (t < 1 / 2) return q;
-      if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
-      return p;
-    }
-    let q = l < 0.5 ? l * (1 + s) : l + s - l * s;
-    let p = 2 * l - q;
-    r = hue2rgb(p, q, h + 1 / 3);
-    g = hue2rgb(p, q, h);
-    b = hue2rgb(p, q, h - 1 / 3);
+  let q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+  let p = 2 * l - q;
+  r = hue2rgb(p, q, h + 1 / 3);
+  g = hue2rgb(p, q, h);
+  b = hue2rgb(p, q, h - 1 / 3);
+
+  function hue2rgb(p, q, t) {
+    if (t < 0) t += 1;
+    if (t > 1) t -= 1;
+    if (t < 1 / 6) return p + (q - p) * 6 * t;
+    if (t < 1 / 2) return q;
+    if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
+    return p;
   }
+
   return ({
     r: Math.round(r * 255),
     g: Math.round(g * 255),
