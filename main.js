@@ -13,6 +13,7 @@ function clrscr(cordX, cordY, width, height) {
   tela.fillRect(cordX, cordY, width, height);
 }
 
+
 const canvas = document.getElementById("canvas");
 const tela = canvas.getContext("2d");
 //// 1.5 ratio 2:3
@@ -106,6 +107,13 @@ let game;
 let check;
 let drop;
 let imageData;
+let storedSettings; 
+try {
+  storedSettings = JSON.parse(localStorage['settings']);
+} catch {
+  storedSettings = undefined;
+}
+console.log(storedSettings);
 
 const btnPause = {
   x: parseInt(sizePreview * .32),
@@ -1009,9 +1017,21 @@ window.addEventListener('DOMContentLoaded', (evt) => {
     })
 
     openModal = modal();
-    colorSlider.dispatchEvent(new Event('input'));
-    bgmSlider.setAttribute("value", parseInt(bgm.volume * 100));
-    effectSlider.setAttribute("value", parseInt(combo.volume + combo4.volume + blockConfirm.volume) / 3 * 100);
+
+    if (storedSettings) {
+      slider.forEach(slide=> {
+        const name = slide.getAttribute("name");
+        const value = storedSettings[name] ? storedSettings[name] : slide.getAttribute("value");
+        slide.setAttribute("value", value);
+        slide.dispatchEvent(new Event('input'))
+      
+      }); 
+    } else {
+      colorSlider.dispatchEvent(new Event('input'));
+      bgmSlider.setAttribute("value", parseInt(bgm.volume * 100));
+      effectSlider.setAttribute("value", parseInt(combo.volume  * 100));
+    }
+
     tela.save();
     tela.resetTransform();
     tela.beginPath();    
@@ -1084,9 +1104,10 @@ const colorSlider = slider[0];
 const bgmSlider = slider[1];
 const effectSlider = slider[2];
 
-colorSlider.addEventListener('input', changeColor, false);
-bgmSlider.addEventListener('input', changeBGMSound, false);
-effectSlider.addEventListener('input', changeEffectSound, false);
+
+colorSlider.addEventListener('input', changeColor);
+bgmSlider.addEventListener('input', changeBGMSound);
+effectSlider.addEventListener('input', changeEffectSound);
 
 function changeColor(e) {
   let value = e.target.value / 360;
@@ -1103,6 +1124,8 @@ function changeColor(e) {
   }
   tela.putImageData(imageData, inicialX, inicialY);
   textBG = `rgba(${new Array(...tela.getImageData(sizePreview, sizePreview * .5, 1, 1).data).map((a, i) => i === 3 ? a /255 : a)})`;
+  let color = {color: e.target.value};
+  storeSettings(color);
 }
 
 function hslToRgb(h, s, l) {
@@ -1129,13 +1152,21 @@ function hslToRgb(h, s, l) {
   });
 }
 function changeBGMSound(e) {
+  console.log(bgm.volume);
   bgm.volume = e.target.value / 100;  
   bgmSlider.setAttribute("value", parseInt(bgm.volume * 100));
+  let soundBGM = {soundBGM: bgmSlider.getAttribute("value")};
+  storeSettings(soundBGM);
 }
 
 function changeEffectSound(e) {
+  console.log(e.target.value);
   combo.volume = e.target.value / 100;
-  combo4.volume = e.target.value / 100;
-  blockConfirm.volume = e.target.value / 100;
-  effectSlider.setAttribute("value", parseInt(combo.volume + combo4.volume + blockConfirm.volume) / 3 * 100);
+  effectSlider.setAttribute("value", parseInt(combo.volume * 100));
+  let soundEffect = {soundEffect: effectSlider.getAttribute("value")};
+  storeSettings(soundEffect);
+}
+
+function storeSettings(value) {
+  localStorage['settings'] = storedSettings !== undefined ? JSON.stringify(Object.assign(storedSettings, value)) : JSON.stringify(value);
 }
