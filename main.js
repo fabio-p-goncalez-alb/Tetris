@@ -654,9 +654,9 @@ async function getDown() {
   }
 }
 
-document.addEventListener('touchstart', handleTouchStart, false);
-document.addEventListener('touchmove', handleTouchMove, false);
-document.addEventListener('touchend', handleTouchEnd, false);
+document.addEventListener('touchstart', handleTouchStart);
+document.addEventListener('touchmove', handleTouchMove);
+document.addEventListener('touchend', handleTouchEnd);
 
 var xDown = null;
 var yDown = null;
@@ -679,7 +679,7 @@ function handleTouchStart(evt) {
 }
 
 function handleTouchMove(evt) {
-  if (!xDown || !yDown || isPaused || Object.keys(actuallyObject).length <= 0) {
+  if (!xDown || !yDown || isPaused || yDown < yTelaInicial / 3 || Object.keys(actuallyObject).length <= 0) {
     return;
   }
 
@@ -690,8 +690,7 @@ function handleTouchMove(evt) {
   let xDiff = xDown - xUp;
   let yDiff = yDown - yUp;
   isMoved = true;
-
-
+  
   if (Math.abs(xDiff) > padding * 0.3) {
     try {
       if (xDiff > 0) {
@@ -716,7 +715,7 @@ function handleTouchMove(evt) {
 function handleTouchEnd(evt) {
   if (openModal.isOpen)
     openModal.highlightedButton(false)
-  if (isPaused || Object.keys(actuallyObject).length <= 0)
+  if (isPaused || yDown < yTelaInicial / 3 || Object.keys(actuallyObject).length <= 0)
     return;
 
   if (isMoved) {
