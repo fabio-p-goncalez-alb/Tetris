@@ -1161,13 +1161,10 @@ function changeBGMSound(e) {
 
 function changeEffectSound(e) {
   console.log(e.target.value);
-<<<<<<< HEAD
   blockConfirm.volume = e.target.value / 100;
   combo.volume = e.target.value / 100;
   combo4.volume = e.target.value / 100;
-=======
   combo.volume = e.target.value / 100;
->>>>>>> 36e99fe8e3ae824a48bc8c5f0d489dd9a6ebed7d
   effectSlider.setAttribute("value", parseInt(combo.volume * 100));
   let soundEffect = {soundEffect: effectSlider.getAttribute("value")};
   storeSettings(soundEffect);
