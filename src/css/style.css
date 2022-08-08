@@ -68,8 +68,8 @@ body
 
 @media only screen and (min-width: 769px) {
   #canvas, #game__screen{
-    height: 100vmin;
-    aspect-ratio: 1/1;
+    height: 100%;
+    aspect-ratio: 2/3;
   }
 }
 
