@@ -158,7 +158,7 @@ const objectsHeap = {
   y: [],
   color: []
 };
-const objectsColor = ['Orange', 'Pink', 'Purple', 'Green', 'Blue', 'Red', 'Yellow', 'Gray']
+const objectsColor = ['#f5c925', '#d30C7B', '#0030b6', '#368f15', '#ab0000', '#5911aa', '#f17105', '#fffcf9']
 
 const object_L = {
   x: [inicialX, inicialX, inicialX, inicialX + padding],
@@ -230,7 +230,8 @@ function clone(items) {
 function newObject() {
   // const clone = (items) => items.map(item => Array.isArray(item) ? clone(item) : item);
 
-  let random = clone([object_L, object_J, object_Z, object_S, object_O, object_T, object_I, object_Cross]);
+  // let random = clone([object_L, object_J, object_Z, object_S, object_O, object_T, object_I, object_Cross]);
+  let random = clone([object_L, object_J, object_Z, object_S, object_O, object_T, object_I]);
   try {
     random = random.filter(item => item.type !== preview.at(-1).type);
   } finally {
