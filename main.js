@@ -107,8 +107,19 @@ let check;
 let drop;
 let imageData;
 
+const btnPause = {
+  x: parseInt(sizePreview * .32),
+  y: parseInt(padding  * .38),
+  width: parseInt(padding * 2),
+  height: parseInt(padding * 1.1),
+  run() {
+    canvas.style.cursor = "pointer";
+    canvas.onclick = isPaused ? initGame : pauseGame;
+  }
+};
+
 const btnReset = {
-  x: parseInt(sizePreview * 1.11),
+  x: parseInt(sizePreview * 1.43),
   y: parseInt(padding * .38),
   width: parseInt(padding * 2),
   height: parseInt(padding * 1.1),
@@ -118,14 +129,14 @@ const btnReset = {
   }
 };
 
-const btnPause = {
-  x: parseInt(sizePreview * 2.56),
+const btnSettings = {
+  x: parseInt(sizePreview * 2.55),
   y: parseInt(padding * .38),
   width: parseInt(padding * 2),
   height: parseInt(padding * 1.1),
   run() {
     canvas.style.cursor = "pointer";
-    canvas.onclick = isPaused ? initGame : pauseGame;
+    canvas.onclick = () => slider.forEach( slide => slide.getAttribute("type") == "range" ? slide.setAttribute("type", "hidden") : slide.setAttribute("type", "range"));
   }
 };
 
@@ -998,7 +1009,9 @@ window.addEventListener('DOMContentLoaded', (evt) => {
     })
 
     openModal = modal();
-    slider.dispatchEvent(new Event('input'));
+    colorSlider.dispatchEvent(new Event('input'));
+    bgmSlider.setAttribute("value", parseInt(bgm.volume * 100));
+    effectSlider.setAttribute("value", parseInt(combo.volume + combo4.volume + blockConfirm.volume) / 3 * 100);
     tela.save();
     tela.resetTransform();
     tela.beginPath();    
@@ -1023,6 +1036,10 @@ canvas.addEventListener('mousemove', (event) => {
   }
   if (getMousePos(canvas, event, btnReset)) {
     btnReset.run();
+    return;
+  }
+  if (getMousePos(canvas, event, btnSettings)) {
+    btnSettings.run();
     return;
   }
 
@@ -1062,8 +1079,14 @@ bgm.addEventListener('timeupdate', (sound) => {
   }
 });
 
-const slider = document.querySelector('#color');
-slider.addEventListener('input', changeColor, false);
+const slider = document.querySelectorAll('.slide');
+const colorSlider = slider[0];
+const bgmSlider = slider[1];
+const effectSlider = slider[2];
+
+colorSlider.addEventListener('input', changeColor, false);
+bgmSlider.addEventListener('input', changeBGMSound, false);
+effectSlider.addEventListener('input', changeEffectSound, false);
 
 function changeColor(e) {
   let value = e.target.value / 360;
@@ -1104,4 +1127,15 @@ function hslToRgb(h, s, l) {
     g: Math.round(g * 255),
     b: Math.round(b * 255),
   });
+}
+function changeBGMSound(e) {
+  bgm.volume = e.target.value / 100;  
+  bgmSlider.setAttribute("value", parseInt(bgm.volume * 100));
+}
+
+function changeEffectSound(e) {
+  combo.volume = e.target.value / 100;
+  combo4.volume = e.target.value / 100;
+  blockConfirm.volume = e.target.value / 100;
+  effectSlider.setAttribute("value", parseInt(combo.volume + combo4.volume + blockConfirm.volume) / 3 * 100);
 }
