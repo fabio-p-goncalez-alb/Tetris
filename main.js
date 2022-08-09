@@ -113,7 +113,6 @@ try {
 } catch {
   storedSettings = undefined;
 }
-console.log(storedSettings);
 
 const btnPause = {
   x: parseInt(sizePreview * .32),
@@ -1152,7 +1151,6 @@ function hslToRgb(h, s, l) {
   });
 }
 function changeBGMSound(e) {
-  console.log(bgm.volume);
   bgm.volume = e.target.value / 100;  
   bgmSlider.setAttribute("value", parseInt(bgm.volume * 100));
   let soundBGM = {soundBGM: bgmSlider.getAttribute("value")};
@@ -1160,7 +1158,6 @@ function changeBGMSound(e) {
 }
 
 function changeEffectSound(e) {
-  console.log(e.target.value);
   blockConfirm.volume = e.target.value / 100;
   combo.volume = e.target.value / 100;
   combo4.volume = e.target.value / 100;
