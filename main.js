@@ -474,7 +474,13 @@ function clrLine(cordY) {
   cordY.forEach(y => tela.fillRect(inicialX, y, xTela, size));
   tela.restore();
   sumPoints(cordY.length);
-  cordY.length === 4 ? combo4.play() : combo.play();
+  if (cordY.length === 4) {
+    combo4.load();
+    combo4.play();
+  } else {
+    combo.load();
+    combo.play();
+  }
 }
 
 function checkObjectFloor(cordX, cordY) {
@@ -1161,7 +1167,6 @@ function changeEffectSound(e) {
   blockConfirm.volume = e.target.value / 100;
   combo.volume = e.target.value / 100;
   combo4.volume = e.target.value / 100;
-  combo.volume = e.target.value / 100;
   effectSlider.setAttribute("value", parseInt(combo.volume * 100));
   let soundEffect = {soundEffect: effectSlider.getAttribute("value")};
   storeSettings(soundEffect);
