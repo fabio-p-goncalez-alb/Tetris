@@ -67,7 +67,7 @@ if (isMobileDevice) {
 
 //Images
 const howToPlay = new Image();
-howToPlay.src = `./assets/images/HowToPlay.svg#svgView(viewBox(${deviceIMG},0,120,220))`;
+howToPlay.src = `./assets/images/HowToPlay.svg#svgView(viewBox(${deviceIMG},0,120,195))`;
 const gameFrame = new Image();
 gameFrame.src = './assets/images/GameFrame.svg';
 
@@ -945,7 +945,6 @@ function modal() {
   let buttonStart;
   let background = tela.getImageData(...imageCord);
 
-  tela.beginPath();
   if (howToPlay.complete) {
     tela.drawImage(howToPlay, ...imageCord);
     buttonStart = tela.getImageData(x, y, width, height);
@@ -958,7 +957,6 @@ function modal() {
   }
 
 
-  // tela.closePath();
   tela.restore();
 
 
@@ -1048,11 +1046,6 @@ window.addEventListener('DOMContentLoaded', (evt) => {
       effectSlider.setAttribute("value", parseInt(combo.volume  * 100));
     }
 
-    tela.save();
-    tela.resetTransform();
-    tela.beginPath();    
-    tela.closePath();
-    tela.restore();
   }
 });
 
