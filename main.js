@@ -1133,8 +1133,8 @@ function changeColor(e) {
   imageData = tela.getImageData(inicialX, inicialY, canvas.width, canvas.height);
   const data = imageData.data;
   for (let i = 0; i < data.length; i += 4) {
-    const alpha = data[i + 3];
-    if (alpha == 75 || alpha == 129 || alpha == 225) {
+    const alpha = Math.floor(data[i + 3]);
+    if (alpha >=75 && alpha <= 220) {
       let newRgb = hslToRgb(value, 1, .5);
       data[i] = newRgb.r;
       data[i + 1] = newRgb.g;
