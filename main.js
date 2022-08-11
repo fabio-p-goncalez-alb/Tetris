@@ -682,6 +682,8 @@ function handleTouchStart(evt) {
   xDown = firstTouch.clientX;
   yDown = firstTouch.clientY;
   lastTime = evt.timeStamp;
+
+  if (bgmSlider.getAttribute("type") == "range" && yDown > yTelaInicial / 3) hideSettings();
 }
 
 function handleTouchMove(evt) {
@@ -749,11 +751,15 @@ function handleTouchEnd(evt) {
 
 }
 
-document.addEventListener('keydown', ({ key, repeat }) => {
+document.addEventListener('keydown', (event) => {
+  event.preventDefault();  
+  let { key, repeat} = event; 
   if (Object.keys(actuallyObject).length > 0 && !isPaused || key.toLowerCase() === 'p') {
     if (!repeat) {
+      let isVisible = bgmSlider.getAttribute("type") == "range";
       switch (key.toLowerCase()) {
         case 'arrowup':
+          isVisible && hideSettings();
           rotateObject(actuallyObject);
           break;
         case 'p':
@@ -765,23 +771,28 @@ document.addEventListener('keydown', ({ key, repeat }) => {
           }
           break;
         case 'c':
+          isVisible && hideSettings();
           holdObject();
           break;
         case ' ': case 'enter':
+          isVisible && hideSettings();
           while (!checkObjectFloor(actuallyObject.x, actuallyObject.y)) {
             runDrop();
           }
           checkGame(true);
           break;
         case 'arrowleft':
+          isVisible && hideSettings();
           isRight = false;
           startMovement.left();
           break;
         case 'arrowright':
+          isVisible && hideSettings();
           isLeft = false;
           startMovement.right();
           break;
         case 'arrowdown':
+          isVisible && hideSettings();
           startMovement.down();
           break;
         default:
@@ -1109,10 +1120,13 @@ const colorSlider = slider[0];
 const bgmSlider = slider[1];
 const effectSlider = slider[2];
 
-
 colorSlider.addEventListener('input', changeColor);
 bgmSlider.addEventListener('input', changeBGMSound);
 effectSlider.addEventListener('input', changeEffectSound);
+
+function hideSettings() {
+  slider.forEach( slide => slide.setAttribute("type", "hidden"));
+}
 
 function changeColor(e) {
   let value = e.target.value / 360;

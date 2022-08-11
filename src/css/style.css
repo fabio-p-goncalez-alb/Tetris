@@ -93,7 +93,7 @@ html, body {
 .sound::-moz-range-thumb {  
   background: transparent;  
   border-radius: 20%;
-  box-shadow: -10vw 0 0 10vw #00ff0dad;  
+  box-shadow: -100vw 0 0 100vw #00ff0dad;  
   cursor: pointer;
   height: 0;
   width: 0;
@@ -102,7 +102,7 @@ html, body {
 .sound::-webkit-slider-thumb {  
   background: transparent;  
   border-radius: 20%;
-  box-shadow: -10vw 0 0 10vw #00ff0dad;  
+  box-shadow: -100vw 0 0 100vw #00ff0dad;  
   cursor: pointer;
   height: 0;
   width: 0;
