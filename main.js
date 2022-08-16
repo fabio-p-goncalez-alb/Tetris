@@ -16,18 +16,77 @@ function clrscr(cordX, cordY, width, height) {
 
 const canvas = document.getElementById("canvas");
 const tela = canvas.getContext("2d");
+let portrait = window.matchMedia("(orientation: portrait)");
+portrait.addEventListener("change", setScreenSizes);
 //// 1.5 ratio 2:3
 const rows = 10;
 const cols = 15;
 const sides = 6.35;
-const size = parseInt(canvas.width / (rows + sides));
-const line = size / 12;
-const padding = size;
+let size;
+let padding; 
+let yTelaInicial;
+let screenGap;
+let xTelaInicial;
+let xTela;
+let yTela;
+let xHolderInicial;
+let yHolderInicial;
+// const size = parseInt(canvas.width / (rows + sides));
+// const padding = size;
 const inicialX = 0;
 const inicialY = 0;
-// const xTelaInicial = xHolder + screenGap;
-const xTela = padding * rows;
-const yTela = padding * cols;
+const xPreviewInicial = [];
+const yPreviewInicial = [];
+
+let xPoints;
+let yPoints;
+let xLevel;
+let yLevel;
+let xCountLines;
+let yCountLines;
+let yTextPoints;
+let yTextLevel;
+let yTextCountLines;
+
+const btnPause = {
+  x: 0,
+  y: 0,
+  width: 0,
+  height: 0,
+  run() {
+    canvas.style.cursor = "pointer";
+    canvas.onclick = isPaused ? initGame : pauseGame;
+  }
+};
+
+const btnReset = {
+  x: 0,
+  y: 0,
+  width: 0,
+  height: 0,
+  run() {
+    canvas.style.cursor = "pointer";
+    canvas.onclick = () => location.reload();
+  }
+};
+
+const btnSettings = {
+  x: 0,
+  y: 0,
+  width: 0,
+  height: 0,
+  run() {
+    canvas.style.cursor = "pointer";
+    canvas.onclick = () => slider.forEach( slide => slide.getAttribute("type") == "range" ? slide.setAttribute("type", "hidden") : slide.setAttribute("type", "range"));
+  }
+};
+
+const gameFrame = new Image();
+
+
+setScreenSizes(portrait);
+
+let line = size / 12;
 const xPreview = padding * 5;
 const yPreview = padding * 5;
 const xHolder = padding * 5;
@@ -35,16 +94,9 @@ const yHolder = padding * 5;
 let textBG;
 let deviceIMG = 0;
 // const screenGap = canvas.width - xTela;
-const screenGap = parseInt(padding * 1.75);
-const xTelaInicial = parseInt(inicialX + padding * 1.58);
-const yTelaInicial = parseInt(padding * sides * 1.18);
-const xPreviewInicial = xTelaInicial + xTela + screenGap;
-const yPreviewInicial = [];
-yPreviewInicial.push(yTelaInicial + padding * 1.45);
-yPreviewInicial.push(yTelaInicial + padding * 4.5);
-yPreviewInicial.push(yTelaInicial + padding * 7.6);
-const xHolderInicial = xTelaInicial + xTela + screenGap;
-const yHolderInicial = yTela + yTelaInicial - padding * 1.9;
+
+// const yTelaInicial = parseInt(padding * sides * 1.18);
+
 const sizePreview = padding * 5;
 const patternCanvas = document.createElement('canvas')
 const patternContext = patternCanvas.getContext("2d");
@@ -65,11 +117,114 @@ if (isMobileDevice) {
 }
 
 
+
+function setScreenSizes(isPortrait){    
+  tela.clearRect(0, 0, canvas.width, canvas.height);  
+  if (isPortrait.matches) {
+    canvas.width = 1200;
+    canvas.height = 1800;
+    size = parseInt(canvas.width / (rows + sides));
+    padding = size;
+    xTelaInicial = parseInt(inicialX + padding * 1.58);
+    yTelaInicial = parseInt(padding * sides * 1.18);
+    xTela = padding * rows;
+    yTela = padding * cols;
+    screenGap = parseInt(padding * 1.75);
+    
+    xPreviewInicial.push(xTelaInicial + xTela + screenGap);    
+    xPreviewInicial.push(xTelaInicial + xTela + screenGap);    
+    xPreviewInicial.push(xTelaInicial + xTela + screenGap);
+        
+    yPreviewInicial.push(yTelaInicial + padding * 1.45);
+    yPreviewInicial.push(yTelaInicial + padding * 4.5);
+    yPreviewInicial.push(yTelaInicial + padding * 7.6);
+
+    xHolderInicial = xTelaInicial + xTela + screenGap;
+    yHolderInicial = yTela + yTelaInicial - padding * 1.9;
+    
+    xPoints = padding * 6;
+    yPoints = padding * 2.25;
+    xLevel = padding * 6;
+    yLevel = padding * 3.25;
+    xCountLines = padding * 6;
+    yCountLines = padding * 4.25;
+    
+    yTextPoints = yPoints* 1.28;
+    yTextLevel = yLevel * 1.2;
+    yTextCountLines = yCountLines * 1.16;
+
+    btnPause.x = parseInt(padding * 1.7);
+    btnPause.y = parseInt(padding  * .38);
+    btnPause.width = parseInt(padding * 2);
+    btnPause.height = parseInt(padding * 1.1);
+
+    btnReset.x = parseInt(padding * 7.2);
+    btnReset.y = parseInt(padding * .38);
+    btnReset.width = parseInt(padding * 2);
+    btnReset.height = parseInt(padding * 1.1);
+
+    btnSettings.x = parseInt(padding * 12.7);
+    btnSettings.y = parseInt(padding * .38);
+    btnSettings.width = parseInt(padding * 2);
+    btnSettings.height = parseInt(padding * 1.1);
+    gameFrame.src = `./assets/images/GameFrame.svg#svgView(viewBox(0,0,150,225))`;
+  } else {
+    canvas.width = 1800;
+    canvas.height = 1200;
+    size = parseInt(canvas.height / (rows + sides) * 0.9);
+    padding = size;
+    xTelaInicial = parseInt(inicialX + padding * 1.58);
+    yTelaInicial = parseInt(padding * 1.5);
+    xTela = padding * rows;
+    yTela = padding * cols;
+    screenGap = parseInt(padding * 1.75);
+
+    xPreviewInicial.push(xTelaInicial + xTela + screenGap * 3.53)
+    xPreviewInicial.push(xTelaInicial + xTela + screenGap * 5.33);
+    xPreviewInicial.push(xTelaInicial + xTela + screenGap * 7.13);
+    yPreviewInicial.push(yTelaInicial + padding * 6.25);
+    yPreviewInicial.push(yTelaInicial + padding * 6.25);
+    yPreviewInicial.push(yTelaInicial + padding * 6.25);
+
+    xHolderInicial = xTelaInicial + xTela + screenGap * 1.35;
+    yHolderInicial = yTela + yTelaInicial - padding * 2;
+
+    xPoints = padding * 22.6;
+    yPoints = padding * 13.1;
+    xLevel = padding * 22.6;
+    yLevel = padding * 14.1;
+    xCountLines = padding * 22.6;
+    yCountLines = padding * 15.14;
+
+    yTextPoints = yPoints * 1.05;
+    yTextLevel = yLevel * 1.05;
+    yTextCountLines = yCountLines * 1.05;
+
+    btnPause.x = parseInt(padding * 13.6);
+    btnPause.y = parseInt(padding  * .38);
+    btnPause.width = parseInt(padding * 2);
+    btnPause.height = parseInt(padding * 1.1);
+
+    btnReset.x = parseInt(padding * 19.15);
+    btnReset.y = parseInt(padding * .38);
+    btnReset.width = parseInt(padding * 2);
+    btnReset.height = parseInt(padding * 1.1);
+
+    btnSettings.x = parseInt(padding * 24.8);
+    btnSettings.y = parseInt(padding * .38);
+    btnSettings.width = parseInt(padding * 2);
+    btnSettings.height = parseInt(padding * 1.1);
+
+    gameFrame.src = `./assets/images/GameFrame.svg#svgView(viewBox(160,0,245,165))`;
+  }
+  console.log(canvas.width, canvas.height)
+}
+
+
+
 //Images
 const howToPlay = new Image();
 howToPlay.src = `./assets/images/HowToPlay.svg#svgView(viewBox(${deviceIMG},0,120,195))`;
-const gameFrame = new Image();
-gameFrame.src = './assets/images/GameFrame.svg';
 
 //Audios
 const bgm = new Audio('./assets/audios/bgm.ogg');
@@ -113,40 +268,6 @@ try {
 } catch {
   storedSettings = undefined;
 }
-
-const btnPause = {
-  x: parseInt(sizePreview * .32),
-  y: parseInt(padding  * .38),
-  width: parseInt(padding * 2),
-  height: parseInt(padding * 1.1),
-  run() {
-    canvas.style.cursor = "pointer";
-    canvas.onclick = isPaused ? initGame : pauseGame;
-  }
-};
-
-const btnReset = {
-  x: parseInt(sizePreview * 1.43),
-  y: parseInt(padding * .38),
-  width: parseInt(padding * 2),
-  height: parseInt(padding * 1.1),
-  run() {
-    canvas.style.cursor = "pointer";
-    canvas.onclick = () => location.reload();
-  }
-};
-
-const btnSettings = {
-  x: parseInt(sizePreview * 2.55),
-  y: parseInt(padding * .38),
-  width: parseInt(padding * 2),
-  height: parseInt(padding * 1.1),
-  run() {
-    canvas.style.cursor = "pointer";
-    canvas.onclick = () => slider.forEach( slide => slide.getAttribute("type") == "range" ? slide.setAttribute("type", "hidden") : slide.setAttribute("type", "range"));
-  }
-};
-
 
 const actuallyObject = {};
 const objectPosition = {};
@@ -316,11 +437,11 @@ function nextPreview() {
   tela.resetTransform();
   preview.forEach((next, i) => {
     tela.save()
-    tela.translate(xPreviewInicial, yPreviewInicial[i]);
+    tela.translate(xPreviewInicial[i], yPreviewInicial[i]);
     fillPreview(next);
     tela.restore();
   });
-  tela.translate(xPreviewInicial, yPreviewInicial[preview.length]);
+  tela.translate(xPreviewInicial[preview.length], yPreviewInicial[preview.length]);
   preview.push(Object.assign({}, previewObject()));
   tela.restore();
 }
@@ -823,7 +944,7 @@ function initGame() {
     tela.save();
     tela.resetTransform();
     for (let i = 0; i < yPreviewInicial.length; i++) {
-      tela.translate(xPreviewInicial, yPreviewInicial[i]);
+      tela.translate(xPreviewInicial[i], yPreviewInicial[i]);
       preview.push(Object.assign({}, previewObject()));
     }
     tela.restore();
@@ -867,16 +988,16 @@ function runGame() {
   const levelWidth = parseInt(tela.measureText(level).width);
   const countLinesWidth = parseInt(tela.measureText(countLines).width);
   const height = 50;
-  tela.clearRect(sizePreview * 1.2, sizePreview - padding * 2.75, pointsWidth, height);
-  tela.clearRect(sizePreview * 1.2, sizePreview - padding * 1.75, levelWidth, height);
-  tela.clearRect(sizePreview * 1.2, sizePreview - padding * 0.75, countLinesWidth, height);
-  tela.fillRect(sizePreview * 1.2, sizePreview - padding * 2.75, pointsWidth, height);
-  tela.fillRect(sizePreview * 1.2, sizePreview - padding * 1.75, levelWidth, height);
-  tela.fillRect(sizePreview * 1.2, sizePreview - padding * 0.75, countLinesWidth, height);
+  tela.clearRect(xPoints, yPoints, pointsWidth, height);
+  tela.clearRect(xLevel, yLevel, levelWidth, height);
+  tela.clearRect(xCountLines, yCountLines, countLinesWidth, height);
+  tela.fillRect(xPoints , yPoints, pointsWidth, height);
+  tela.fillRect(xLevel, yLevel, levelWidth, height);
+  tela.fillRect(xCountLines, yCountLines, countLinesWidth, height);
   tela.restore();
-  tela.fillText(points, sizePreview * 1.2, sizePreview - padding * 2.1);
-  tela.fillText(level, sizePreview * 1.2, sizePreview - padding * 1.1);
-  tela.fillText(countLines, sizePreview * 1.2, sizePreview - padding * 0.1);
+  tela.fillText(points, xPoints, yTextPoints);
+  tela.fillText(level, xLevel, yTextLevel);
+  tela.fillText(countLines, xCountLines, yTextCountLines);
   tela.closePath();
   tela.restore();
   if (Math.min(...objectsHeap.y) < inicialY) {
@@ -997,7 +1118,7 @@ function modal() {
         canvas.onclick = initGame;
       } else {
         tela.save();
-        tela.clearRect(x, y, width, height)
+        // tela.clearRect(x, y, width, height)
         tela.putImageData(buttonStart, x, y);
         tela.restore();
         canvas.style.cursor = "default";
@@ -1026,8 +1147,8 @@ window.addEventListener('DOMContentLoaded', (evt) => {
     tela.drawImage(gameFrame, inicialX, inicialY, canvas.width, canvas.height);
     drawScreen(inicialX, inicialY, xHolder, yHolder, xHolderInicial, yHolderInicial, 0.5);
     drawScreen(inicialX, inicialY, xTela, yTela, xTelaInicial, yTelaInicial);
-    yPreviewInicial.forEach(yPreviewInicial => {
-      drawScreen(inicialX, inicialY, xPreview, yPreview, xPreviewInicial, yPreviewInicial, 0.5);
+    yPreviewInicial.forEach((yPreviewInicial, i) => {
+      drawScreen(inicialX, inicialY, xPreview, yPreview, xPreviewInicial[i], yPreviewInicial, 0.5);
     })
 
     openModal = modal();
@@ -1135,7 +1256,7 @@ function changeColor(e) {
     }
   }
   tela.putImageData(imageData, inicialX, inicialY);
-  textBG = `rgba(${new Array(...tela.getImageData(sizePreview, sizePreview * .5, 1, 1).data).map((a, i) => i === 3 ? a /255 : a)})`;
+  textBG = `rgba(${new Array(...tela.getImageData(xPoints, yPoints - 1, 1, 1).data).map((a, i) => i === 3 ? a /255 : a)})`;
   let color = {color: e.target.value};
   storeSettings(color);
 }

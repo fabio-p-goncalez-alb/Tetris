@@ -109,15 +109,52 @@ html, body {
   -webkit-appearance: none;
 }
 
+@media only screen and (orientation: landscape) {
+  #canvas, #game__screen {
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 5/3;
+  }
+  .slide {
+    right: 10%;
+    height: 5%;
+  }
+  #color {
+    top: 14%;
+  }
 
-@media only screen and (max-width: 768px) {
+  #color::-moz-range-thumb {
+    height: 2.2em;
+  }
+
+  #color::-webkit-slider-thumb{
+    height: 2.2em;
+  }
+
+  #sound__bgm {
+    top: 22%;
+  }
+  
+  #sound__effect {
+    top: 30%;
+  }
+
+  .sound::-moz-range-track{
+    background-position:  .1em 0.7em, 0 .9em;
+  }
+  .sound::-webkit-slider-runnable-track {
+    background-position:  .1em 0.7em, 0 .9em;
+  }
+}
+
+@media only screen and (max-width: 768px) and (orientation: portrait){
   #canvas, #game__screen {
     height: 100%;
     width: 100%;
   }
 }
 
-@media only screen and (min-width: 769px) {
+@media only screen and (min-width: 769px) and (orientation: portrait){
   #canvas, #game__screen {
     aspect-ratio: 2/3;
     max-height: 100%;
@@ -126,13 +163,13 @@ html, body {
   }
 }
 
-@media only screen and (min-width: 1025px) {
+@media only screen and (min-width: 1025px) and (orientation: portrait) {
   #canvas, #game__screen {
     aspect-ratio: 4/5;
   }
 }
 
-@media only screen and (min-width: 1201px) {
+@media only screen and (min-width: 1201px) and (orientation: portrait) {
   #canvas, #game__screen {
     aspect-ratio: 1/1;
   }
